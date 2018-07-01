@@ -1,0 +1,13 @@
+{
+  "name": "my-mastadon",
+  "version": "0.0.1",
+  "description": "Wrapper over my mastadon atom feed / timeline",
+  "main": "handler.js",
+  "author": "Travis Shears <btbtravis@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "fast-feed": "^1.5.5",
+    "feedparser": "^2.2.9",
+    "request": "^2.87.0"
+  }
+}
