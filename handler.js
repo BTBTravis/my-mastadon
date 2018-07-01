@@ -3,15 +3,12 @@ var request = require('request');
 var FeedParser = require('feedparser');
 
 module.exports.feed = (event, context, callback) => {
+  var feedparser = new FeedParser();
   const response = {
     statusCode: 200,
-    body: JSON.stringify({
-      message: 'Feeeeeeeeeeeeed'
-    }),
   };
 
-  var feedparser = new FeedParser();
-
+  // promise that loads feed from mastadon profile atom
   const load = () => new Promise(function(resolve, reject) {
     var req = request('https://vis.social/@travisshears.atom');
     req.on('error', function (error) {
@@ -29,19 +26,15 @@ module.exports.feed = (event, context, callback) => {
     feedparser.on('error', function (error) {
       reject(error);
     });
-
     feedparser.on('readable', function () {
       var stream = this; // `this` is `feedparser`, which is a stream
       var meta = this.meta; // **NOTE** the "meta" is always available in the context of the feedparser instance
       var item;
       while (item = stream.read()) {
-        items.push(item);
-        //console.log(item);
+        items.push(cleanItem(item));
         console.log('Got toot');
       }
-      //resolve(items);
     });
-    //return items;
   })
 
 
@@ -51,6 +44,24 @@ module.exports.feed = (event, context, callback) => {
       callback(null, response);
     });
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // callback(null, { message: 'Go Serverless v1.0! Your function executed successfully!', event });
+  function cleanItem(item) {
+    let allowedKeys = [
+      "title"
+      , "description"
+      , "summary"
+      , "date"
+      , "pubdate"
+      , "pubDate"
+      , "link"
+      , "guid"
+      , "author"
+    ];
+
+    let newItem = {};
+    for(var key in item) {
+      if(allowedKeys.includes(key)) newItem[key] = item[key];
+    }
+    return newItem;
+  }
+
 };
