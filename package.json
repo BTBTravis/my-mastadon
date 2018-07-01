@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "mastodon": "^1.2.2"
+    "fast-feed": "^1.5.5",
+    "request": "^2.87.0"
   }
 }
