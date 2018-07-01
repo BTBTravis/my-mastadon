@@ -1,28 +1,22 @@
 service: my-mastadon
 
-
 provider:
   name: aws
   runtime: nodejs6.10
-  versionFunctions: false
-  memorySize: 512
   apiKeys:
-    - travisshears
-  usagePlan: # Optional usage plan configuration
+    - mastadon1
+  usagePlan:
     quota:
       limit: 2000
       period: MONTH
 
-  environment: ${file(env.yml):${self:provider.stage}}
-
-
 functions:
-  getfeed:
-    handler: handler.getfeed
-    description: Grabs my mastadon feed with provided api key
+  feed:
+    handler: handler.feed
+    description: Mastadon feed
     events:
       - http:
-          path: getfeed
+          path: feed
           method: get
           cors: true
           private: true
