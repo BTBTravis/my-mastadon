@@ -10,7 +10,6 @@ provider:
       limit: 2000
       period: MONTH
 
-  environment: ${file(env.yml):${self:provider.stage}}
 
 functions:
   feed:
